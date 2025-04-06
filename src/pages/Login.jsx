@@ -76,24 +76,29 @@ const Login = () => {
             
             const {data} = await axios.post(`${server}/api/v1/user/new`,
                 formData,config);
+                    
 
-              
-                
-                    
-                    dispatch(userExists(data.user));
-                    
-                    toast.success(data.message,{id:toastId});
+                    if(data.succes && data?.user){
+                        
+                        dispatch(userExists(data.user));
+                        
+                       return toast.success(data.message,{id:toastId});
+                    } else{
+                        
+                        setIsLoading(false)
+                       return toast.error('Please uplaod avatar',{id:toastId})
+                    }
+        
                 
               
 
         } catch (error) {
             
-            // console.log(error)
+             console.log(error)
             toast.error(error?.response?.data?.msg || 'something went wrong',{id:toastId})
             
-        }finally{
-            setIsLoading(true)
         }
+            
         
     }
 
@@ -195,6 +200,7 @@ const Login = () => {
                                 objectFit:"contain",
                                 
                             }}
+                            required
                             src={avatar.preview} />
                          
  <IconButton sx={
